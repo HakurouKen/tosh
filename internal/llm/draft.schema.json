@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "script", "shell", "suggested_action", "summary", "notes", "question"],
+  "properties": {
+    "status": {"type": "string", "enum": ["ready", "needs_input"]},
+    "script": {"type": "string", "maxLength": 32768},
+    "shell": {"type": "string", "enum": ["zsh", "bash", "fish", "sh"]},
+    "suggested_action": {"type": "string", "enum": ["execute", "copy"]},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "notes": {"type": "array", "maxItems": 12, "items": {"type": "string", "maxLength": 2048}},
+    "question": {"type": "string", "maxLength": 4096}
+  },
+  "allOf": [
+    {"if": {"properties": {"status": {"const": "ready"}}}, "then": {"properties": {"script": {"minLength": 1}, "question": {"const": ""}}}},
+    {"if": {"properties": {"status": {"const": "needs_input"}}}, "then": {"properties": {"script": {"const": ""}, "question": {"minLength": 1}}}}
+  ]
+}
