@@ -6,9 +6,20 @@ import (
 	"context"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 )
+
+func TestCLIVersion(t *testing.T) {
+	directory := fixture(t)
+	cmd := exec.Command(binary(t), "--version")
+	cmd.Env = isolatedEnv(directory, nil)
+	output, err := cmd.CombinedOutput()
+	if err != nil || strings.TrimSpace(string(output)) != "tosh dev" {
+		t.Fatalf("普通构建应报告开发版本：%v\n%s", err, output)
+	}
+}
 
 func TestCLI(t *testing.T) {
 	bin := binary(t)

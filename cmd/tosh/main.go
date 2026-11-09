@@ -23,6 +23,8 @@ import (
 	"tosh/internal/ui"
 )
 
+var version = "dev"
+
 func main() { os.Exit(run()) }
 func run() int {
 	initialLanguage, initialPath := bootstrapOptions(os.Args[1:])
@@ -42,7 +44,7 @@ func run() int {
 	logPath := fs.String("log", "", tr("Include the tail of a log file"))
 	printOnly := fs.Bool("print", false, tr("Generate JSON only; do not open the TUI or execute"))
 	initConfig := fs.Bool("init-config", false, tr("Create a global config template without overwriting"))
-	version := fs.Bool("version", false, tr("Show version"))
+	showVersion := fs.Bool("version", false, tr("Show version"))
 	langFlag := fs.String("lang", "", tr("UI and model response language (auto, zh, en)"))
 	fs.Usage = func() {
 		helpPath := *path
@@ -61,8 +63,8 @@ func run() int {
 		}
 		return 2
 	}
-	if *version {
-		fmt.Println("tosh 0.1.0")
+	if *showVersion {
+		fmt.Println("tosh " + version)
 		return 0
 	}
 	if *initConfig {
